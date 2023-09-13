@@ -1,0 +1,109 @@
+[
+
+
+    {
+        "filter": "beauty",
+        "title": "Beauty",
+        "images":[
+            
+            "http://127.0.0.1:8000/assets/images/04.png",
+            "http://127.0.0.1:8000/assets/images/01.jpg",
+            "http://127.0.0.1:8000/assets/images/02.jpg",
+            "http://127.0.0.1:8000/assets/images/03.jpg",
+            "http://127.0.0.1:8000/assets/images/04.png",
+            "http://127.0.0.1:8000/assets/images/01.jpg",
+            "http://127.0.0.1:8000/assets/images/02.jpg",
+            "http://127.0.0.1:8000/assets/images/02.jpg"
+            
+        ]
+    },
+    {
+        "filter": "e-commerce",
+        "title": "E-commerce",
+        "images":[
+            
+            "http://127.0.0.1:8000/assets/images/05.png",
+            "http://127.0.0.1:8000/assets/images/06.png",
+            "http://127.0.0.1:8000/assets/images/07.png"
+            
+        ]
+    },
+    {
+        "filter": "auto",
+        "title": "Auto",
+        "images":[
+            
+            "http://127.0.0.1:8000/assets/images/05.png",
+            "http://127.0.0.1:8000/assets/images/06.png",
+            "http://127.0.0.1:8000/assets/images/07.png"
+            
+        ]
+    },
+    {
+        "filter": "real-estate",
+        "title": "Real Estate",
+        "images":[
+            
+            "http://127.0.0.1:8000/assets/images/05.png",
+            "http://127.0.0.1:8000/assets/images/06.png",
+            "http://127.0.0.1:8000/assets/images/07.png"
+            
+        ]
+    },
+    {
+        "filter": "cbd",
+        "title": "CBD",
+        "images":[
+            
+            "http://127.0.0.1:8000/assets/images/05.png",
+            "http://127.0.0.1:8000/assets/images/06.png",
+            "http://127.0.0.1:8000/assets/images/07.png"
+            
+        ]
+    },
+    {
+        "filter": "education",
+        "title": "Eduction",
+        "images":[
+            
+            "http://127.0.0.1:8000/assets/images/05.png",
+            "http://127.0.0.1:8000/assets/images/06.png",
+            "http://127.0.0.1:8000/assets/images/07.png"
+            
+        ]
+    },
+    {
+        "filter": "food",
+        "title": "Food",
+        "images":[
+            
+            "http://127.0.0.1:8000/assets/images/05.png",
+            "http://127.0.0.1:8000/assets/images/06.png",
+            "http://127.0.0.1:8000/assets/images/07.png"
+            
+        ]
+    },
+    {
+        "filter": "health",
+        "title": "Health",
+        "images":[
+            
+            "http://127.0.0.1:8000/assets/images/05.png",
+            "http://127.0.0.1:8000/assets/images/06.png",
+            "http://127.0.0.1:8000/assets/images/07.png"
+            
+        ]
+    },
+    {
+        "filter": "non-profit",
+        "title": "Non Profit",
+        "images":[
+            
+            "http://127.0.0.1:8000/assets/images/05.png",
+            "http://127.0.0.1:8000/assets/images/06.png",
+            "http://127.0.0.1:8000/assets/images/07.png"
+            
+        ]
+    }
+    
+]

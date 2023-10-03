@@ -74,22 +74,37 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="card-box">
-                            <h5 class="mt-0 font-14 mb-3">Pending Orders</h5>
-                            <div class="table-responsive">
-                                <table class="table table-hover mails m-0 table table-actions-bar table-centered">
+                            <h4 class="mt-0  mb-3">Order History</h4>
+                            <div class="">
+                                <table id="data-table" class="table table-hover ">
                                     <thead>
                                     <tr>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Products</th>
-                                        <th>Start Date</th>
+                                        <th>ID</th>
+                                        <th>Date</th>
+                                        <th>Amount</th>
+                                        <th>Actions</th>
+                                        <th>Order Status</th>
                                     </tr>
                                     </thead>
 
                                     <tbody>
-                                    
-                            
-
+                                    @if(count($orders) > 0)
+                                    @foreach($orders as $ord)
+                                        <tr>
+                                            <td>{{ $ord->order_id }}</td>
+                                            <td>{{ $ord->payment_paid_date }}</td>
+                                            <td>${{ $ord->amount }}.00</td>
+                                            
+                                            <td><div class="btn-group">
+                                                <a class="btn btn-dark" >View</a>
+                                                <a class="btn btn-success" >Print</a>
+                                                <a class="btn btn-warning" >Re-Order</a>
+                                                <a class="btn btn-danger" >Share</a>
+                                            </div></td>
+                                            <td>{{ $ord->status }}</td>
+                                        </tr>
+                                    @endforeach
+                                    @endif
                                     </tbody>
                                 </table>
                             </div>
@@ -187,6 +202,14 @@
 
 <!-- App js -->
 <script src="{{ asset('assets/js/app.min.js') }}"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+
+$(document).ready( function () {
+        $('#data-table').DataTable();
+    } );
+</script>
 
 </body>
 </html>

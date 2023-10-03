@@ -8,7 +8,7 @@ use Illuminate\Support\Collection;
 use PhpParser\Node\Expr\Cast\Object_;
 use Illuminate\Support\Str;
 use Stripe;
-
+use Khill\Lavacharts\Lavacharts;
 
 class DashboardController extends Controller
 {
@@ -17,10 +17,142 @@ class DashboardController extends Controller
 
     function home(Request $request){
         $customer = $request->session()->get('Customer');
-        $totalorders = DB::table('orders')->where('user_id',$customer->id)->where('status','paid')->count();
-        // $pendingOrders = DB::table("cartitem")->where('user_id',$customer->id)->where('')
-        return view('Templates.dashboard',['OnlineCustomer'=> $customer,'paidorders'=> $totalorders]);
+        $totalorders = DB::table('orders')
+            ->where('user_id',$customer->id)
+            ->where('status','paid')
+            ->count();
+
+        $orders = DB::table("orders")
+            ->where('user_id',$customer->id)
+            ->where('status','paid')
+            ->get();
+
+        return view('Templates.dashboard',['OnlineCustomer'=> $customer,'paidorders'=> $totalorders,'orders' => $orders]);
     }
+
+
+    function reports(Request $request){
+        $customer = $request->session()->get('Customer');
+       
+        $pendingOrders = DB::table("cartitem")
+            ->select('orderId',"order_date","status")
+            ->where('status','=', 'orderPlaced')
+            ->distinct()
+            ->get();
+
+        $completedOrders = DB::table("cartitem")
+            ->select('orderId',"order_date","status")
+            ->where('status','=', 'Completed')
+            ->distinct()
+            ->get();
+    
+        return view('Templates.reports',['OnlineCustomer'=> $customer,'pendingOrders'=>$pendingOrders,'completedOrders'=>$completedOrders]);
+    }
+
+
+    function billing(Request $request){
+        $customer = $request->session()->get('Customer');
+        $totalorders = DB::table('orders')
+            ->where('user_id',$customer->id)
+            ->where('status','paid')
+            ->sum('amount');
+        $allorders  = DB::table('orders')
+            ->where('user_id',$customer->id)
+            ->where('status','paid')
+            ->get();
+            
+        $allordersmonths  = DB::table('orders')
+            ->where('user_id',$customer->id)
+            ->where('status','paid')
+            ->get();
+
+            
+        $total = count($allorders) - 1;
+        $lastorder = $allorders[$total];
+        $amounts = DB::table('funds')->where('user_id',$customer->id)->sum('amount');
+        return view('Templates.billing',['OnlineCustomer'=> $customer,'paidorderssum'=> $totalorders,'lastorder'=>$lastorder,'orders' => $allordersmonths,'amount'=> $amounts]);
+    }
+
+    function funds(Request $request){
+        $customer = $request->session()->get('Customer');
+       
+        return view('Templates.funds',['OnlineCustomer'=> $customer]);
+    }
+    
+    function fundsprocess(Request $request){
+        $customer = $request->session()->get('Customer');
+        Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+        $search_customer = Stripe\Customer::search([
+            'query' => 'email:\''.$customer->email.'\'',
+          ]);
+        $product = Stripe\Product::create([
+            'name' => "FUNDS FOR CUSTOMER $customer->email",
+        ]);
+
+        $price = Stripe\Price::create([
+            'unit_amount' => $request->input('amount') * 100,
+            'currency' => 'usd',
+            'product' => $product->id,
+        ]);
+
+        
+          $checkoutSession = Stripe\Checkout\Session::create([
+            'line_items' => [
+                [
+                  'price' => $price->id,
+                  'quantity' => 1,
+                ],
+              ],
+              'customer_email' => $request->input('customer-email'),
+              
+              'success_url' => 'http://127.0.0.1:8000/addfunds-status/{CHECKOUT_SESSION_ID}',
+              'mode' => 'payment',
+          ]);
+    
+
+        return redirect($checkoutSession->url);
+    }
+
+
+    function fundsstatus(Request $request,$id){
+        $customer = $request->session()->get('Customer');
+        Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+        $checkoutSession = Stripe\Checkout\Session::retrieve($id);
+       
+        if($checkoutSession->payment_status == "paid"){
+           $checkuser = DB::table('funds')->where('user_id',$customer->id)->get();
+           if(count($checkuser) > 0){
+                $updatefunds = DB::table('funds')->where('user_id',$customer->id)->update([
+                    'amount' => ++$checkoutSession->amount_total,
+                    'last_update' => date('m-d-y  H:i:s'),
+                ]);
+           }else{
+            $updatefunds = DB::table('funds')->insert([
+                'user_id' => $customer->id,
+                'amount' => $checkoutSession->amount_total,
+                'topup_date' => date('m-d-y'),
+                'status' => $checkoutSession->payment_status,
+                'last_update' => date('m-d-y  H:i:s'),
+            ]);
+           }
+        }
+
+        if($updatefunds){
+            return redirect('./backlink/billing');
+        }
+
+    }
+
+    public function orders(Request $request){
+        $customer = $request->session()->get('Customer');
+       
+        $orders = DB::table("orders")
+        ->where('user_id',$customer->id)
+        ->where('status','paid')
+        ->get();
+        return view('Templates.order',['OnlineCustomer'=> $customer,'orders' => $orders]);
+    }
+
 
     function createOrder(Request $request){
         $customer = $request->session()->get('Customer');
@@ -97,6 +229,7 @@ class DashboardController extends Controller
     }
 
 
+
     function clearorder(Request $req , $id){
         $delete = DB::table("cartitem")->where('orderID', '=', $id)->update([
             'status' => 'orderDraft'
@@ -162,9 +295,18 @@ class DashboardController extends Controller
     } 
 
     function thankyou(Request $req,$id){
+
+        $customer = $request->session()->get('Customer');
         Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
         $checkoutSession = Stripe\Checkout\Session::retrieve($id);
-        
+       
+        $search_customer = Stripe\Customer::search([
+            'query' => 'email:\''.$search_customer->data[0]->email.'\'',
+        ]);
+      
+      
+     
+
         $sum = $checkoutSession->amount_total / 100 ;
         if($checkoutSession->payment_status == "paid"){
             $orders = DB::table('orders')->where('payment_ID',$checkoutSession->id)->update([
@@ -177,7 +319,10 @@ class DashboardController extends Controller
                  'status' => "orderPlaced"
              ]);
         }
-        $req->Session()->flash("success","'Order Placed Thank You'");
+
+
+
+        $req->Session()->flash("success","Order Placed Thank You");
         return redirect('/');
         
     }

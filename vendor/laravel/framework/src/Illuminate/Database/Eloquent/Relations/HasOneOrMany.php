@@ -236,7 +236,7 @@ abstract class HasOneOrMany extends Relation
     public function firstOrCreate(array $attributes = [], array $values = [])
     {
         if (is_null($instance = $this->where($attributes)->first())) {
-            $instance = $this->createOrFirst($attributes, $values);
+            $instance = $this->create(array_merge($attributes, $values));
         }
 
         return $instance;
@@ -253,8 +253,8 @@ abstract class HasOneOrMany extends Relation
     {
         try {
             return $this->getQuery()->withSavepointIfNeeded(fn () => $this->create(array_merge($attributes, $values)));
-        } catch (UniqueConstraintViolationException) {
-            return $this->useWritePdo()->where($attributes)->first();
+        } catch (UniqueConstraintViolationException $e) {
+            return $this->useWritePdo()->where($attributes)->first() ?? throw $e;
         }
     }
 
@@ -267,10 +267,10 @@ abstract class HasOneOrMany extends Relation
      */
     public function updateOrCreate(array $attributes, array $values = [])
     {
-        return tap($this->firstOrCreate($attributes, $values), function ($instance) use ($values) {
-            if (! $instance->wasRecentlyCreated) {
-                $instance->fill($values)->save();
-            }
+        return tap($this->firstOrNew($attributes), function ($instance) use ($values) {
+            $instance->fill($values);
+
+            $instance->save();
         });
     }
 

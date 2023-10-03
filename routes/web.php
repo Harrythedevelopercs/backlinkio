@@ -54,5 +54,11 @@ Route::middleware('CustomerVerified')->group(function () {
         Route::get('/clearorder/{id}','clearorder');
         Route::post('/charge/{ODI}','charge');
         Route::get('/thankyou/{id}','thankyou');
+        Route::get('/backlink/reports','reports');
+        Route::get('/backlink/ordersReport','orders');
+        Route::get('/backlink/billing','billing');
+        Route::get('/addfunds','funds');
+        Route::post('/fundsprocess','fundsprocess');
+        Route::get('/addfunds-status/{id}','fundsstatus');
     });
 });

@@ -567,7 +567,7 @@ class Builder implements BuilderContract
             return $instance;
         }
 
-        return $this->createOrFirst($attributes, $values);
+        return $this->create(array_merge($attributes, $values));
     }
 
     /**
@@ -581,8 +581,8 @@ class Builder implements BuilderContract
     {
         try {
             return $this->withSavepointIfNeeded(fn () => $this->create(array_merge($attributes, $values)));
-        } catch (UniqueConstraintViolationException) {
-            return $this->useWritePdo()->where($attributes)->first();
+        } catch (UniqueConstraintViolationException $e) {
+            return $this->useWritePdo()->where($attributes)->first() ?? throw $e;
         }
     }
 
@@ -595,10 +595,8 @@ class Builder implements BuilderContract
      */
     public function updateOrCreate(array $attributes, array $values = [])
     {
-        return tap($this->firstOrCreate($attributes, $values), function ($instance) use ($values) {
-            if (! $instance->wasRecentlyCreated) {
-                $instance->fill($values)->save();
-            }
+        return tap($this->firstOrNew($attributes), function ($instance) use ($values) {
+            $instance->fill($values)->save();
         });
     }
 

@@ -5,6 +5,60 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 14.14.0 - 2023-09-22
+
+### Changed
+- Revert `percent` value from `Charts`
+
+## 14.13.0 - 2023-09-21
+
+### Changed
+- Added `percent` value from `Charts`
+
+## 14.12.2 - 2023-09-20
+
+### Fixed
+- Overflow icons on the main menu 
+- Menu height on mobile
+
+## 14.12.1 - 2023-09-20
+
+### Added
+- `isImpersonating` alias method for `Impersonation` class 
+- Tests from `Sortable` feature
+
+### Fixed
+- Overflow icons on the main menu
+
+## 14.12.0 - 2023-09-14
+
+### Added
+- New `Sortable` layout and `Sortable` helpers trait
+- Support `Enum` for `relation` field [#2711](https://github.com/orchidsoftware/platform/pull/2711)
+
+## 14.11.0 - 2023-09-10
+
+### Added
+- Translation Polish language [#2708](https://github.com/orchidsoftware/platform/pull/2708)
+
+### Fixed
+- Remove "\r\n" `Quill` editor when usage code block
+
+## 14.10.0 - 2023-09-06
+
+### Added
+- Support `enum` feature from `Select` field [#2699](https://github.com/orchidsoftware/platform/pull/2699)
+
+### Changed
+- Improve small legend template
+
+### Fixed
+- Remove overview on form tag [#2702](https://github.com/orchidsoftware/platform/issues/2702)
+
+## 14.9.1 - 2023-08-30
+
+### Fixed 
+- Implemented support for validating redirect requests, resolving the lack of a mechanism to verify them previously
 
 ## 14.9.0 - 2023-08-29
 

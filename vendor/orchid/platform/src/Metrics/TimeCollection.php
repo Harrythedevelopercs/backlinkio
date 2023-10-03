@@ -37,9 +37,9 @@ class TimeCollection extends Collection
         $closure = $closure ?? static fn ($label) => $label;
 
         return [
-            'name'   => $name,
-            'labels' => $this->pluck('label')->map($closure)->toArray(),
-            'values' => $this->pluck('value')->toArray(),
+            'name'    => $name,
+            'labels'  => $this->pluck('label')->map($closure)->toArray(),
+            'values'  => $this->pluck('value')->toArray(),
         ];
     }
 

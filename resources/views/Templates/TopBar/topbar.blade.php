@@ -228,7 +228,7 @@
             </li>
 
             <li>
-                <a href="index.html">
+                <a href="/backlink/reports">
                     <i class="ti-receipt"></i>
                     <span> Reports </span>
                 </a>
@@ -242,14 +242,14 @@
             </li>
 
             <li>
-                <a href="index.html">
+                <a href="/backlink/ordersReport">
                     <i class="ti-shopping-cart-full"></i>
                     <span> Orders </span>
                 </a>
             </li>
 
             <li>
-                <a href="index.html">
+                <a href="/backlink/billing">
                     <i class="ti-money"></i>
                     <span> Billing </span>
                 </a>

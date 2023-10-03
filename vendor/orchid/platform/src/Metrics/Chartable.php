@@ -60,8 +60,8 @@ trait Chartable
             );
 
             $result = [
-                'value' => ($found ? $found->value : 0),
-                'label' => $startDate->toDateString(),
+                'value'   => ($found ? $found->value : 0),
+                'label'   => $startDate->toDateString(),
             ];
 
             $startDate->addDay();

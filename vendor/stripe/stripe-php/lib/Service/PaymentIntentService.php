@@ -196,12 +196,12 @@ class PaymentIntentService extends \Stripe\Service\AbstractService
     /**
      * Retrieves the details of a PaymentIntent that has previously been created.
      *
-     * Client-side retrieval using a publishable key is allowed when the
-     * <code>client_secret</code> is provided in the query string.
+     * You can retrieve a PaymentIntent client-side using a publishable key when the
+     * <code>client_secret</code> is in the query string.
      *
-     * When retrieved with a publishable key, only a subset of properties will be
-     * returned. Please refer to the <a href="#payment_intent_object">payment
-     * intent</a> object reference for more details.
+     * If you retrieve a PaymentIntent with a publishable key, it only returns a subset
+     * of properties. Refer to the <a href="#payment_intent_object">payment intent</a>
+     * object reference for more details.
      *
      * @param string $id
      * @param null|array $params
@@ -239,10 +239,10 @@ class PaymentIntentService extends \Stripe\Service\AbstractService
     /**
      * Updates properties on a PaymentIntent object without confirming.
      *
-     * Depending on which properties you update, you may need to confirm the
-     * PaymentIntent again. For example, updating the <code>payment_method</code> will
-     * always require you to confirm the PaymentIntent again. If you prefer to update
-     * and confirm at the same time, we recommend updating properties via the <a
+     * Depending on which properties you update, you might need to confirm the
+     * PaymentIntent again. For example, updating the <code>payment_method</code>
+     * always requires you to confirm the PaymentIntent again. If you prefer to update
+     * and confirm at the same time, we recommend updating properties through the <a
      * href="/docs/api/payment_intents/confirm">confirm API</a> instead.
      *
      * @param string $id

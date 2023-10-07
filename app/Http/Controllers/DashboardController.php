@@ -66,16 +66,35 @@ class DashboardController extends Controller
             ->where('status','paid')
             ->get();
 
+        
+        $fundsreport = DB::table('fundshistory')
+            ->where('user_id',$customer->id)
+            ->get();
             
         $total = count($allorders) - 1;
         $lastorder = $allorders[$total];
         $amounts = DB::table('funds')->where('user_id',$customer->id)->sum('amount');
-        return view('Templates.billing',['OnlineCustomer'=> $customer,'paidorderssum'=> $totalorders,'lastorder'=>$lastorder,'orders' => $allordersmonths,'amount'=> $amounts]);
+        return view('Templates.billing',[
+            'OnlineCustomer'=> $customer,
+            'paidorderssum'=> $totalorders,
+            'lastorder'=>$lastorder,
+            'orders' => $allordersmonths,
+            'amount'=> $amounts,
+            'fundsreport' => $fundsreport,
+        ]);
+    }
+
+
+    function orderDetails(Request $request,$id){
+        $customer = $request->session()->get('Customer');
+        $Order = DB::table('cartitem')->join('orders','orders.order_id','=','cartitem.orderId')->select('cartitem.id as CID','orders.*','cartitem.*')->where('cartitem.orderId',$id)->get();
+        $totalOrderAmount = DB::table('cartitem')->where('orderId',$id)->sum('category_price');
+        return view('Templates.viewReport',['OnlineCustomer'=> $customer,'OD'=> $id,'Order' => $Order,'TotalAmount'=>$totalOrderAmount]);
     }
 
     function funds(Request $request){
         $customer = $request->session()->get('Customer');
-       
+        
         return view('Templates.funds',['OnlineCustomer'=> $customer]);
     }
     
@@ -118,12 +137,22 @@ class DashboardController extends Controller
         $customer = $request->session()->get('Customer');
         Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
         $checkoutSession = Stripe\Checkout\Session::retrieve($id);
-       
+        echo "<pre>";
+
         if($checkoutSession->payment_status == "paid"){
+ 
+            $add_fund_history = DB::table('fundshistory')->insert([
+                'user_id'    => $customer->id,
+                'amount'     => $checkoutSession->amount_total,
+                'stripe_ref' => $checkoutSession->id,
+                'date'       => date('m-d-y  H:i:s'),
+                'status'     => "Funds Added"
+            ]);
+
            $checkuser = DB::table('funds')->where('user_id',$customer->id)->get();
            if(count($checkuser) > 0){
                 $updatefunds = DB::table('funds')->where('user_id',$customer->id)->update([
-                    'amount' => ++$checkoutSession->amount_total,
+                    'amount' => $checkoutSession->amount_total + $checkuser[0]->amount,
                     'last_update' => date('m-d-y  H:i:s'),
                 ]);
            }else{
@@ -326,4 +355,50 @@ class DashboardController extends Controller
         return redirect('/');
         
     }
+
+    function adminorder(Request $request){
+        $customer = $request->session()->get('Customer');
+       
+        if($customer->is_verified != 10){
+            return "No Access Bro";
+        }
+        else{
+            $pendingOrders = DB::table("cartitem")
+            ->select('orderId',"order_date","status")
+            ->where('status','=', 'orderPlaced')
+            ->distinct()
+            ->get();
+
+        $completedOrders = DB::table("cartitem")
+            ->select('orderId',"order_date","status")
+            ->where('status','=', 'Completed')
+            ->distinct()
+            ->get();
+    
+        return view('Templates.adminorder',['OnlineCustomer'=> $customer,'pendingOrders'=>$pendingOrders,'completedOrders'=>$completedOrders]);
+          
+        }
+        
+    }
+
+
+    function confrimorder(Request $request,$id){
+        $customer = $request->session()->get('Customer');
+       
+        if($customer->is_verified != 10){
+            return "No Access Bro";
+        }
+        else{
+            $pendingOrders = DB::table("cartitem")
+            ->select('orderId',"order_date","status")
+            ->where('status','=', 'orderPlaced')
+            ->distinct()
+            ->get();
+
+        return view('Templates.adminorder',['OnlineCustomer'=> $customer,'pendingOrders'=>$pendingOrders]);
+          
+        }
+    }
+
+
 }

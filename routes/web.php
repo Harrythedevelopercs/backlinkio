@@ -60,5 +60,8 @@ Route::middleware('CustomerVerified')->group(function () {
         Route::get('/addfunds','funds');
         Route::post('/fundsprocess','fundsprocess');
         Route::get('/addfunds-status/{id}','fundsstatus');
+        Route::get('/viewreport/{id}','orderDetails');
+        Route::get('/backlinks/orders','adminorder');
+        Route::get('/backlink/admin/order/viewreport/{id}','confrimorder');
     });
 });

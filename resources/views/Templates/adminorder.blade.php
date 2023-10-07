@@ -18,7 +18,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div>
-                            <h4 class="header-title mb-3">Reports</h4>
+                            <h4 class="header-title mb-3">Orders </h4>
                         </div>
                     </div>
                 </div>
@@ -30,7 +30,7 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="card-box">
-                            <h4 class="mt-0  mb-3">Pending Order <span class="font-12">Team is working</span></h4>
+                            <h4 class="mt-0  mb-3">Pending Order </h4>
                             <div class="mb-4 mt-5 ">
                                 <table id="data-table-pen" class="table table-hover ">
                                     <thead>
@@ -49,8 +49,8 @@
                                             <td>{{ $ord->orderId }}</td>
                                             <td>{{ $ord->order_date }}</td>
                                             <td><div class="btn-group">
-                                                <a href="/viewreport/{{ $ord->orderId }}"class="btn btn-dark" >View</a>
-                                                <a class="btn btn-info" >Print</a>
+                                                <a href="/backlink/admin/order/viewreport/{{ $ord->orderId }}"class="btn btn-dark" >View</a>
+                                                <a class="btn btn-danger" >Cancel Order</a>
                                             </div></td>
                                             <td>{{ $ord->status }}</td>
                                         </tr>

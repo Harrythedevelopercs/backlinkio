@@ -63,5 +63,7 @@ Route::middleware('CustomerVerified')->group(function () {
         Route::get('/viewreport/{id}','orderDetails');
         Route::get('/backlinks/orders','adminorder');
         Route::get('/backlink/admin/order/viewreport/{id}','confrimorder');
+        Route::get('/order/status/change','changeStatus');
+        Route::get('/admin/accounts','accounts');
     });
 });

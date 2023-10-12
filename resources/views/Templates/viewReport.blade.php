@@ -36,7 +36,7 @@
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="headingOne">
                                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $ord->CID }}" aria-expanded="true" aria-controls="collapse{{ $ord->id }}">
-                                        {{ $ord->anchor }} 
+                                        {{ $ord->anchor }}  <span style="font-weight:600 ;margin-left:10px"> {{ $ord->status }}</span>
                                     </button>
                                     </h2>
                                     <div id="collapse{{ $ord->CID }}" class="accordion-collapse collapse " aria-labelledby="headingOne" data-bs-parent="#accordionExample">
@@ -53,6 +53,7 @@
                                             <tbody>
                                                 <tr>
                                                     <td>{{ $ord->status }}</td>
+                                                    <td>{{ $ord->responseURL }}</td>
                                                 </tr>
                                             </tbody>
                                         </table>

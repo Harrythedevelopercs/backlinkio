@@ -258,7 +258,19 @@
             <li>
                 <a href="/daplans/">
                     <i class="ti-money"></i>
-                    <span> Add DA Plans </span>
+                    <span>Admin Add DA Plans </span>
+                </a>
+            </li>
+            <li>
+                <a href="/backlinks/orders">
+                    <i class="ti-money"></i>
+                    <span>Admin Orders </span>
+                </a>
+            </li>
+            <li>
+                <a href="/backlinks/orders">
+                    <i class="ti-money"></i>
+                    <span>Accounts </span>
                 </a>
             </li>
         </ul>

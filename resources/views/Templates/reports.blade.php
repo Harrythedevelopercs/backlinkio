@@ -86,7 +86,7 @@
                                             <td>{{ $ord->orderId }}</td>
                                             <td>{{ $ord->order_date }}</td>
                                             <td><div class="btn-group">
-                                                <a class="btn btn-dark" >View</a>
+                                                <a href="/viewreport/{{ $ord->orderId }}" class="btn btn-dark" >View</a>
                                                 <a class="btn btn-success" >Print</a>
                                             </div></td>
                                             <td>{{ $ord->status }}</td>

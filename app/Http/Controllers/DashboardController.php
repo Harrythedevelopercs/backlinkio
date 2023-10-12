@@ -36,13 +36,13 @@ class DashboardController extends Controller
        
         $pendingOrders = DB::table("cartitem")
             ->select('orderId',"order_date","status")
-            ->where('status','=', 'orderPlaced')
+            ->where('status','=', 'OrderPlaced')
             ->distinct()
             ->get();
 
         $completedOrders = DB::table("cartitem")
             ->select('orderId',"order_date","status")
-            ->where('status','=', 'Completed')
+            ->where('status','=', 'OrderComplete')
             ->distinct()
             ->get();
     
@@ -371,7 +371,7 @@ class DashboardController extends Controller
 
         $completedOrders = DB::table("cartitem")
             ->select('orderId',"order_date","status")
-            ->where('status','=', 'Completed')
+            ->where('status','=', 'OrderComplete')
             ->distinct()
             ->get();
     
@@ -394,11 +394,30 @@ class DashboardController extends Controller
             ->where('status','=', 'orderPlaced')
             ->distinct()
             ->get();
-
-        return view('Templates.adminorder',['OnlineCustomer'=> $customer,'pendingOrders'=>$pendingOrders]);
+            $Order = DB::table('cartitem')->join('orders','orders.order_id','=','cartitem.orderId')->select('cartitem.id as CID','orders.*','cartitem.*')->where('cartitem.orderId',$id)->get();
+            $totalOrderAmount = DB::table('cartitem')->where('orderId',$id)->sum('category_price');
+          
+        return view('Templates.confrimorder',['OnlineCustomer'=> $customer,'pendingOrders'=>$pendingOrders,'OD' => $id, "Order" => $Order,"TotalAmount" => $totalOrderAmount]);
           
         }
     }
 
+
+    function changeStatus(Request $request){
+        $productID = $request->input('productID');
+
+        $updateCart = DB::table('cartitem')
+        ->where('id',$productID)
+        ->update([
+            'responseURL' => $request->input('basic-url'),
+            'status' => $request->input('productStatus')
+        ]);
+
+        return redirect()->back();
+    }
+
+    function accounts(Request $request){
+        
+    }
 
 }

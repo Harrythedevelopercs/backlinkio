@@ -416,8 +416,6 @@ class DashboardController extends Controller
         return redirect()->back();
     }
 
-    function accounts(Request $request){
-        
-    }
+   
 
 }
